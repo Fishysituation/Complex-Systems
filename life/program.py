@@ -4,10 +4,11 @@ pygame.init()
 dead = '.'
 alive = '*'
 
-dimensionspx = widthpx, heightpx = 400, 400
 
 size = 40
-dimensionslg = widthlg, heightlg = int(widthpx/size), int(heightpx/size)
+dimensionslg = widthlg, heightlg = 10, 20
+dimensionspx = widthpx, heightpx = int(widthlg*size), int(heightlg*size)
+
 
 board = []
 
@@ -47,22 +48,38 @@ def Display():
 		print()
 	print()
 
+#wraps board around in horzintal direction
+def modX(num):
+	if num >= 0:
+		return num % widthlg
+    #if negative, check other side of board
+	else:
+		return num + widthlg
+
+#wraps board around in vertical direction
+def modY(num):
+	if num >= 0:
+		return num % heightlg
+    #if negative, check other side of board
+	else:
+		return num + heightlg
 
 #Iterate the board one time step
 def Iterate():
-
-	#TODO torus board
-	changes = []
-
-	for y in range(1, heightlg -1 ):
-		for x in range(1, widthlg -1 ):
+	changes = []	
+	#check entire range of board
+	for y in range(0, heightlg):
+		for x in range(0, widthlg):
 			count = 0
+
+			#iteate through all neighbour cells
 			for j in range(y-1, y+2):
 				for i in range(x-1, x+2):
-					if board[j][i] == alive:
+					if board[modY(j)][modX(i)] == alive:
 						count += 1
 						if j == y and i == x:
 							count -= 1
+
 			#kill loney/overpopulated
 			if count > 3 or count < 2:
 				changes.append((y, x, dead))
