@@ -1,12 +1,14 @@
 import sys, pygame
-pygame.init()
 
 dead = '.'
 alive = '*'
 
+deadColour = (40, 40, 40)
+aliveColour = (255, 255, 255)
 
-size = 40
-dimensionslg = widthlg, heightlg = 10, 20
+
+size = 20
+dimensionslg = widthlg, heightlg = 40, 40
 dimensionspx = widthpx, heightpx = int(widthlg*size), int(heightlg*size)
 
 
@@ -40,13 +42,23 @@ def GetIn():
 
 
 #display cmdln board
-def Display():
+def DisplayConsole():
 	print()
 	for y in range(0, heightlg):
 		for x in range(0, widthlg):
 			print(' ' + board[y][x], end = '')
 		print()
 	print()
+
+#writes console board to window
+def DisplayScreen(surface):
+	for y in range(0, heightlg):
+		for x in range(0, widthlg):
+			#if a cell is alive
+			if board[x][y] == alive:
+				#draw it as white square
+				cell = pygame.Rect(x*size, y*size, size, size)
+				surface.fill(aliveColour, rect=cell, special_flags=0)
 
 #wraps board around in horzintal direction
 def modX(num):
@@ -94,19 +106,39 @@ def Iterate():
 
 #entry point
 def Main():
+	#setup
 	Generate()
 	GetIn()
-	Display()
+	#DisplayConsole()
+
+	pygame.init()
+	
+	#create SURFACE size of screen
+	screen = pygame.display.set_mode(dimensionspx)
+	pygame.display.set_caption('Game of Life')
+	pygame.mouse.set_visible(1)
+
+	#setup clock
+	clock = pygame.time.Clock()
 
 	while (True):
-		stringIn = input()
-		if stringIn == 'n':
-			Iterate()
-			Display()		
-		
-		elif stringIn == 'quit':
-			break
 
-    #screen = pygame.display.set_mode(dimensionspx)
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT: 
+				sys.exit()
+
+		Iterate()
+		#DisplayConsole()
+
+		#draw background
+		screen.fill(deadColour)
+		#draw cells
+		DisplayScreen(screen)
+		
+		pygame.display.flip()
+
+		clock.tick(25)
+		
+    
 
 Main()
