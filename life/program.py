@@ -37,7 +37,7 @@ def DisplayScreen(surface):
 	for y in range(0, heightlg):
 		for x in range(0, widthlg):
 			#if a cell is alive
-			if board[x][y] == alive:
+			if board[y][x] == alive:
 				#draw it as white square
 				cell = pygame.Rect(x*size, y*size, size, size)
 				surface.fill(aliveColour, rect=cell, special_flags=0)
@@ -108,7 +108,7 @@ def Main():
 				sys.exit()
 
 		Iterate()
-		#DisplayConsole()
+		DisplayConsole()
 
 		#draw background
 		screen.fill(deadColour)
@@ -117,7 +117,7 @@ def Main():
 		
 		pygame.display.flip()
 
-		clock.tick(10)
+		clock.tick(0.5)
 		
 
 
