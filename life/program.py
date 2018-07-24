@@ -7,10 +7,11 @@ deadColour = (40, 40, 40)
 aliveColour = (255, 255, 255)
 
 
-size = 20
-dimensionslg = widthlg, heightlg = 40, 40
-dimensionspx = widthpx, heightpx = int(widthlg*size), int(heightlg*size)
-
+size = 0
+dimensionslg = 0, 0
+widthlg, heightlg = 0, 0
+dimensionspx = 0, 0
+widthpx, heightpx = 0, 0
 
 board = []
 
@@ -21,25 +22,6 @@ def Generate():
 		for x in range(widthlg):
 			line.append(dead)
 		board.append(line)
-
-
-#get board input
-def GetIn():
-	# "left/top justified" string input 
-	# i.e. can enter fewer chars than logical height/width
-	starting = []
-	for i in range(0, heightlg):
-		stringIn = input()
-		if stringIn == 'stop':
-			break
-		else:
-			starting.append(stringIn)
-
-	#apply the starting board state
-	for y in range(0, len(starting)):
-		for x in range(0, len(starting[y])):
-			board[y][x] = starting[y][x]
-
 
 #display cmdln board
 def DisplayConsole():
@@ -106,9 +88,7 @@ def Iterate():
 
 #entry point
 def Main():
-	#setup
-	Generate()
-	GetIn()
+
 	#DisplayConsole()
 
 	pygame.init()
@@ -137,8 +117,36 @@ def Main():
 		
 		pygame.display.flip()
 
-		clock.tick(25)
+		clock.tick(10)
 		
-    
+
+
+#setup
+#get dimensions
+dimensions = input().split()
+widthlg = int(dimensions[0])
+heightlg = int(dimensions[1])
+size = int(input())
+
+dimensionspx = widthpx, heightpx = int(widthlg*size), int(heightlg*size)
+
+#draw board
+Generate()
+
+# "left/top justified" string input 
+# i.e. can enter fewer chars/lines than logical height/width
+starting = []
+for i in range(0, heightlg):
+	stringIn = input()
+	if stringIn == 'stop':
+		break
+	else:
+		starting.append(stringIn)
+
+#apply the starting board state
+for y in range(0, len(starting)):
+	for x in range(0, len(starting[y])):
+		board[y][x] = starting[y][x]
+
 
 Main()
